@@ -2,27 +2,17 @@ import React, { useRef, useState } from 'react';
 import { Form, Button } from 'rsuite';
 import {CustomField} from '../components/CustomField';
 
-function FormB2_2() {
-  const formRef = useRef();
-  const [formValue, setFormValue] = useState({
+export const FormB2_2FormValue = ({
     lostWorkDays: '',
     explanatoryNote: '',
   });
 
-
-  const handleSubmit = () => {
-    console.log(formValue);
-  };
-
+  export function FormB2_2() {
   return (
-    <Form ref={formRef} formValue={formValue} onChange={(formValue) => {setFormValue(formValue);}}layout="inline">
+    <div>
         <CustomField name="lostWorkDays" label="工傷損失天數: " />
         <CustomField name="explanatoryNote" label="解釋性說明: " />
-      <Button appearance="primary" onClick={handleSubmit}>
-        提交報告
-      </Button>
-    </Form>
-
+    </div>
   );
 }
 
