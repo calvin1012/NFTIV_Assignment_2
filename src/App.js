@@ -2,9 +2,11 @@ import {
   Button,
   ButtonToolbar,
   Container,
+  FlexboxGrid,
   Form,
   InputNumber,
   Panel,
+  Stack,
 } from "rsuite";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken, selectToken, updateToken } from "./store/slice/token";
@@ -16,29 +18,28 @@ import "rsuite/dist/rsuite.min.css";
 import { useEffect, useRef, useState } from "react";
 import GetProfile from "./function/GetProfile";
 import { CustomField } from "./components/CustomField";
+import { FormB1_1, FormB1_1FormValue } from "./components/FormB1";
 
-const defaultFormValue = {
-  q1: "",
-  q2: "",
-};
 function App() {
   const formRef = useRef();
   const dispatch = useDispatch();
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [isProfileUpdate, setIsProfileUpdate] = useState(false);
-  const [formValue, setFormValue] = useState({});
-  const [profile, setProfile] = useState();
+  const [formValue, setFormValue] = useState(FormB1_1FormValue);
+  const [forms, setForms] = useState([]);
+  const [profile, setProfile] = useState(null);
   const token = useSelector(selectToken);
 
   useEffect(() => {
     if (isProfileUpdate) {
       async function updateProfile() {
         const res = await GetProfile(token);
+        console.log(res);
         setProfile(res);
       }
 
       updateProfile();
-      setFormValue({ ...defaultFormValue });
+      setFormValue({});
       setPage((nextPage) => {
         return (nextPage += 1);
       });
@@ -58,7 +59,7 @@ function App() {
 
   const handlePageUpdate = (page) => {
     setPage(page);
-    setFormValue(profile.details[page]);
+    setFormValue(profile.details[page - 1]);
   };
 
   const handleStoreData = () => {
@@ -66,7 +67,16 @@ function App() {
     setIsProfileUpdate(true);
   };
 
-  console.log(profile);
+  const renderForm = () => {
+    switch (page) {
+      case 1:
+        return FormB1_1;
+
+      default:
+        return;
+    }
+  };
+  console.log(profile, page);
 
   return (
     <Container>
@@ -83,22 +93,6 @@ function App() {
           <p>current Token: {token}</p>
         </ButtonToolbar>
         <br />
-        {profile && (
-          <span>
-            <p>Select Page: </p>
-            <InputNumber
-              min={0}
-              max={profile.details ? profile.details.length : 0}
-              defaultValue={0}
-              onChange={(page) => {
-                handlePageUpdate(page);
-              }}
-              style={{ width: 100 }}
-            >
-              Choose Page
-            </InputNumber>
-          </span>
-        )}
         {token && (
           <Form
             ref={formRef}
@@ -108,12 +102,43 @@ function App() {
             }}
             layout="inline"
           >
-            <CustomField name="q1" label="Q1: " />
-            <br />
-            <CustomField name="q2" label="Q2: " />
+            {renderForm()}
           </Form>
         )}
-        {profile && JSON.stringify(profile.details, "", 2)}
+        {token && (
+          <div
+            style={{
+              // display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FlexboxGrid justify="space-between">
+              <FlexboxGrid.Item colspan={4}>
+                <Button>Prvs Page</Button>
+              </FlexboxGrid.Item>
+              {/* <FlexboxGrid.Item colspan={6}>
+                <Stack spacing={10}>
+                  <p>Select Page:</p>
+                  <InputNumber
+                    min={1}
+                    max={5}
+                    defaultValue={page}
+                    onChange={(page) => {
+                      handlePageUpdate(page);
+                    }}
+                    style={{ width: 100 }}
+                  >
+                    Choose Page
+                  </InputNumber>
+                </Stack>
+              </FlexboxGrid.Item> */}
+              <FlexboxGrid.Item colspan={4}>
+                <Button>Next Page</Button>
+              </FlexboxGrid.Item>
+            </FlexboxGrid>
+          </div>
+        )}
 
         <br />
         {token && <Button onClick={() => handleStoreData()}>Send Data</Button>}
