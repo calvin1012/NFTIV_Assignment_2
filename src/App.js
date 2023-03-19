@@ -16,6 +16,11 @@ import "rsuite/dist/rsuite.min.css";
 import { useEffect, useRef, useState } from "react";
 import GetProfile from "./function/GetProfile";
 import { CustomField } from "./components/CustomField";
+import FormB1_1 from "./function/FormB1_1";
+import FormB1_2 from "./function/FormB1_2";
+import FormB2_1 from "./function/FormB2_1";
+import FormB2_2 from "./function/FormB2_2";
+import FormB2_3 from "./function/FormB2_3";
 
 const defaultFormValue = {
   q1: "",
@@ -117,6 +122,11 @@ function App() {
 
         <br />
         {token && <Button onClick={() => handleStoreData()}>Send Data</Button>}
+        <FormB1_1 />
+        <FormB1_2 />
+        <FormB2_1 />
+        <FormB2_2 />
+        <FormB2_3 />
       </Panel>
     </Container>
   );
