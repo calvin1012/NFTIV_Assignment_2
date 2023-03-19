@@ -2,17 +2,16 @@ import React, { useRef, useState } from 'react';
 import { Form, Button } from 'rsuite';
 import {CustomField} from '../components/CustomField';
 
-export const FormB2_1FormValue = ({
+export const FormB2_1FormValue = {
     qualitativeDescription: '',
     managementSystem: '',
     healthServices: '',
     scope: '',
     responsibility: '',
     leadingIndicators: '',
-  });
+  };
 
-  export function FormB2_3() {
-  return (
+  export const FormB2_3 =  (
     <div>
         <CustomField name="qualitativeDescription" label="對發行人採取的相關措施的定性描述，以及這些措施的實施和監控情況: " />
         <CustomField name="managementSystem" label="是否實施了職業健康和安全管理體系，如果實施，是否採用了公認的風險管理和/或管理體系標準/指南: " />
@@ -22,6 +21,5 @@ export const FormB2_1FormValue = ({
         <CustomField name="leadingIndicators" label="用於向管理層和其他利益相關者（例如監管機構）通報職業健康和安全績效的領先指標:: " />
     </div>
   );
-}
 
 export default FormB2_3;

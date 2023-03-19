@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Form, Button } from 'rsuite';
-import {CustomField} from '../components/CustomField';
+import {CustomField} from './CustomField';
 
 export const FormB1_1FormValue = {
   totalEmployees: "",
@@ -16,8 +16,7 @@ export const FormB1_1FormValue = {
   explanatoryNote: "",
 };
 
-export function FormB1_1() {
-  return (
+export const FormB1_1 = (
     <div>
       <CustomField name="totalEmployees" label="員工的總人數: " />
       <CustomField name="totalMaleEmployees" label="男性員工總人數: " />
@@ -32,6 +31,5 @@ export function FormB1_1() {
       <CustomField name="explanatoryNote" label="解釋性說明: " />
     </div>
   );
-}
 
 export default FormB1_1;

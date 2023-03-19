@@ -12,8 +12,7 @@ export const FormB1_2FormValue = {
   };
 
 
-  export function FormB1_2() {
-  return (
+  export const FormB1_2 = (
     <div>
         <CustomField name="totalTurnoverRate" label="員工總離職率: " />
         <CustomField name="maleTurnoverRate" label="男性員工離職率: " />
@@ -23,6 +22,5 @@ export const FormB1_2FormValue = {
         <CustomField name="explanatoryNote" label="解釋性說明: " />
     </div>
   );
-}
 
 export default FormB1_2;
