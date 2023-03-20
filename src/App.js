@@ -18,14 +18,14 @@ import "rsuite/dist/rsuite.min.css";
 import { useEffect, useRef, useState } from "react";
 import GetProfile from "./function/GetProfile";
 import { CustomField } from "./components/CustomField";
-import { FormB1_1, FormB1_1FormValue } from "./components/FormB1";
+import { FormB1_2, FormB1_2FormValue } from "./components/FormB1_2";
 
 function App() {
   const formRef = useRef();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [isProfileUpdate, setIsProfileUpdate] = useState(false);
-  const [formValue, setFormValue] = useState(FormB1_1FormValue);
+  const [formValue, setFormValue] = useState(FormB1_2FormValue);
   const [forms, setForms] = useState([]);
   const [profile, setProfile] = useState(null);
   const token = useSelector(selectToken);
@@ -70,7 +70,7 @@ function App() {
   const renderForm = () => {
     switch (page) {
       case 1:
-        return FormB1_1;
+        return FormB1_2;
 
       default:
         return;
