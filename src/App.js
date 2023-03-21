@@ -136,22 +136,7 @@ function App() {
                   Prvs Page
                 </Button>
               </FlexboxGrid.Item>
-              {/* <FlexboxGrid.Item colspan={6}>
-                <Stack spacing={10}>
-                  <p>Select Page:</p>
-                  <InputNumber
-                    min={1}
-                    max={5}
-                    defaultValue={page}
-                    onChange={(page) => {
-                      handlePageUpdate(page);
-                    }}
-                    style={{ width: 100 }}
-                  >
-                    Choose Page
-                  </InputNumber>
-                </Stack>
-              </FlexboxGrid.Item> */}
+
               <FlexboxGrid.Item colspan={4}>
                 <Button
                   onClick={() => handlePageUpdate(1)}
