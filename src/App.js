@@ -2,9 +2,7 @@ import {
   Button,
   ButtonToolbar,
   Container,
-  FlexboxGrid,
   Form,
-  InputNumber,
   Panel,
   Stack,
 } from "rsuite";
@@ -18,31 +16,25 @@ import "rsuite/dist/rsuite.min.css";
 import { useEffect, useRef, useState } from "react";
 import GetProfile from "./function/GetProfile";
 import { CustomField } from "./components/CustomField";
-import { FormB1_1, FormB1_1FormValue } from "./components/FormB1_1";
-import { FormB2_1, FormB2_1FormValue } from "./components/FormB2_1";
-import { FormB2_2, FormB2_2FormValue } from "./components/FormB2_2";
-import { FormB2_3, FormB2_3FormValue } from "./components/FormB2_3";
 
 function App() {
   const formRef = useRef();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [isProfileUpdate, setIsProfileUpdate] = useState(false);
-  const [formValue, setFormValue] = useState(FormB1_1FormValue);
-  const [forms, setForms] = useState([]);
-  const [profile, setProfile] = useState(null);
+  const [formValue, setFormValue] = useState({});
+  const [profile, setProfile] = useState();
   const token = useSelector(selectToken);
 
   useEffect(() => {
     if (isProfileUpdate) {
       async function updateProfile() {
         const res = await GetProfile(token);
-        console.log(res);
         setProfile(res);
       }
 
       updateProfile();
-      setFormValue({});
+      setFormValue({ ...defaultFormValue });
       setPage((nextPage) => {
         return (nextPage += 1);
       });
@@ -62,30 +54,36 @@ function App() {
 
   const handlePageUpdate = (page) => {
     setPage(page);
-    setFormValue(profile.details[page - 1]);
+    setFormValue(profile.details[page]);
   };
 
   const handleStoreData = () => {
     StoreData(token, page, formValue);
     setIsProfileUpdate(true);
+
+    setPage((nextPage) => {
+      return (nextPage += p);
+    });
   };
 
   const renderForm = () => {
     switch (page) {
+      case 0:
+        return FormB1_1;
       case 1:
-        return FormB2_1;
-  
+        return FormB1_2;
       case 2:
-        return FormB2_2;
-  
+        return FormB2_1;
       case 3:
+        return FormB2_2;
+      case 4:
         return FormB2_3;
-  
       default:
         return;
     }
   };
-  console.log(profile, page);
+
+  console.log(profile);
 
   return (
     <Container>
@@ -111,46 +109,24 @@ function App() {
             }}
             layout="inline"
           >
-            {renderForm()}
+            <CustomField name="q1" label="Q1: " />
+            <br />
+            <CustomField name="q2" label="Q2: " />
           </Form>
         )}
-        {token && (
-          <div
-            style={{
-              // display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FlexboxGrid justify="space-between">
+        {profile && JSON.stringify(profile.details, "", 2)}
+
               <FlexboxGrid.Item colspan={4}>
-                <Button>Prvs Page</Button>
-              </FlexboxGrid.Item>
-              {/* <FlexboxGrid.Item colspan={6}>
-                <Stack spacing={10}>
-                  <p>Select Page:</p>
-                  <InputNumber
-                    min={1}
-                    max={5}
-                    defaultValue={page}
-                    onChange={(page) => {
-                      handlePageUpdate(page);
-                    }}
-                    style={{ width: 100 }}
-                  >
-                    Choose Page
-                  </InputNumber>
-                </Stack>
-              </FlexboxGrid.Item> */}
-              <FlexboxGrid.Item colspan={4}>
-                <Button>Next Page</Button>
+                <Button
+                  onClick={() => handlePageUpdate(1)}
+                  disabled={page === 4}
+                >
+                  Next Page
+                </Button>
               </FlexboxGrid.Item>
             </FlexboxGrid>
-          </div>
+          </Footer>
         )}
-
-        <br />
-        {token && <Button onClick={() => handleStoreData()}>Send Data</Button>}
       </Panel>
     </Container>
   );
