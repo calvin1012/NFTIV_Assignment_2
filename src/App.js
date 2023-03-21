@@ -8,22 +8,22 @@ import {
   Form,
   Panel,
   Stack,
+  CheckboxGroup
 } from "rsuite";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken, selectToken, updateToken } from "./store/slice/token";
 import GetToken from "./function/GetToken";
 import StoreData from "./function/StoreData";
 import SubmitData from "./function/Submit";
-
 import "rsuite/dist/rsuite.min.css";
 import { useEffect, useRef, useState } from "react";
 import GetProfile from "./function/GetProfile";
 import { CustomField } from "./components/CustomField";
 import { FormB1_1, FormB1_1FormValue } from "./components/FormB1_1";
 import { FormB1_2, FormB1_2FormValue } from "./components/FormB1_2";
-import { FormB2_1, FormB2_1FormValue } from "./components/FormB2_1";
-import { FormB2_2, FormB2_2FormValue } from "./components/FormB2_2";
-import { FormB2_3, FormB2_3FormValue } from "./components/FormB2_3";
+import FormB2_1, { FormB2_1FormValue } from "./components/FormB2_1";
+import FormB2_2, { FormB2_2FormValue } from "./components/FormB2_2";
+import FormB2_3, { FormB2_3FormValue } from "./components/FormB2_3";
 
 function App() {
   const formRef = useRef();

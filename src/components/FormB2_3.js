@@ -62,12 +62,14 @@ export const FormB2_3 = (
         label="如何促進員工健康:"
         accepter={CheckboxGroup}
       >
+        <CheckboxGroup>
         <Checkbox value="smokingCessation">戒煙計劃</Checkbox>
         <Checkbox value="dietAdvice">飲食建議</Checkbox>
         <Checkbox value="healthyCanteen">提供健康食品的食堂</Checkbox>
         <Checkbox value="stressReduction">減壓計劃</Checkbox>
         <Checkbox value="employeeHealthProgram">員工健康計劃</Checkbox>
         <Checkbox value="gymFacilities">提供健身房/健身設施</Checkbox>
+        </CheckboxGroup>
       </CustomField>
       </FlexboxGrid.Item>
       <FlexboxGrid.Item colspan={12}>
