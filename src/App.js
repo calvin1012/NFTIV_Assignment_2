@@ -2,11 +2,11 @@ import {
   Button,
   ButtonToolbar,
   Container,
+  Content,
   FlexboxGrid,
+  Footer,
   Form,
-  InputNumber,
   Panel,
-  Stack,
 } from "rsuite";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken, selectToken, updateToken } from "./store/slice/token";
@@ -17,16 +17,24 @@ import SubmitData from "./function/Submit";
 import "rsuite/dist/rsuite.min.css";
 import { useEffect, useRef, useState } from "react";
 import GetProfile from "./function/GetProfile";
-import { CustomField } from "./components/CustomField";
-import { FormB1_1, FormB1_1FormValue } from "./components/FormB1";
+import { FormB1_1, FormB1_1FormValue } from "./components/FormB1_1";
+import { FormB1_2, FormB1_2FormValue } from "./components/FormB1_2";
+import FormB2_1, { FormB2_1FormValue } from "./components/FormB2_1";
+import FormB2_2, { FormB2_2FormValue } from "./components/FormB2_2";
+import FormB2_3, { FormB2_3FormValue } from "./components/FormB2_3";
 
 function App() {
   const formRef = useRef();
   const dispatch = useDispatch();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [isProfileUpdate, setIsProfileUpdate] = useState(false);
-  const [formValue, setFormValue] = useState(FormB1_1FormValue);
-  const [forms, setForms] = useState([]);
+  const [formValue, setFormValue] = useState([
+    FormB1_1FormValue,
+    FormB1_2FormValue,
+    FormB2_1FormValue,
+    FormB2_2FormValue,
+    FormB2_3FormValue,
+  ]);
   const [profile, setProfile] = useState(null);
   const token = useSelector(selectToken);
 
@@ -39,10 +47,6 @@ function App() {
       }
 
       updateProfile();
-      setFormValue({});
-      setPage((nextPage) => {
-        return (nextPage += 1);
-      });
       setIsProfileUpdate(false);
     }
   }, [isProfileUpdate]);
@@ -57,9 +61,13 @@ function App() {
     await dispatch(removeToken(t)); // return data should be null
   };
 
-  const handlePageUpdate = (page) => {
-    setPage(page);
-    setFormValue(profile.details[page - 1]);
+  const handlePageUpdate = (p) => {
+    StoreData(token, page + 1, formValue[page]);
+    setIsProfileUpdate(true);
+
+    setPage((nextPage) => {
+      return (nextPage += p);
+    });
   };
 
   const handleStoreData = () => {
@@ -69,14 +77,22 @@ function App() {
 
   const renderForm = () => {
     switch (page) {
-      case 1:
+      case 0:
         return FormB1_1;
-
+      case 1:
+        return FormB1_2;
+      case 2:
+        return FormB2_1;
+      case 3:
+        return FormB2_2;
+      case 4:
+        return FormB2_3;
       default:
         return;
     }
   };
-  console.log(profile, page);
+
+  console.log(formValue, page);
 
   return (
     <Container>
@@ -94,28 +110,36 @@ function App() {
         </ButtonToolbar>
         <br />
         {token && (
-          <Form
-            ref={formRef}
-            formValue={formValue}
-            onChange={(formValue) => {
-              setFormValue(formValue);
-            }}
-            layout="inline"
-          >
-            {renderForm()}
-          </Form>
+          <Content style={{ height: window.innerHeight - 150 }}>
+            <Panel style={{ height: window.innerHeight - 160 }} shaded>
+              <Form
+                ref={formRef}
+                formValue={formValue[page]}
+                onChange={(formValue) => {
+                  setFormValue((nextFormValue) => {
+                    const v = [...nextFormValue];
+                    v[page] = formValue;
+                    // console.log(v);
+                    return v;
+                  });
+                }}
+                layout="inline"
+              >
+                {renderForm()}
+              </Form>
+            </Panel>
+          </Content>
         )}
         {token && (
-          <div
-            style={{
-              // display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FlexboxGrid justify="space-between">
+          <Footer>
+            <FlexboxGrid justify="space-around">
               <FlexboxGrid.Item colspan={4}>
-                <Button>Prvs Page</Button>
+                <Button
+                  onClick={() => handlePageUpdate(-1)}
+                  disabled={page === 0}
+                >
+                  Prvs Page
+                </Button>
               </FlexboxGrid.Item>
               {/* <FlexboxGrid.Item colspan={6}>
                 <Stack spacing={10}>
@@ -134,14 +158,16 @@ function App() {
                 </Stack>
               </FlexboxGrid.Item> */}
               <FlexboxGrid.Item colspan={4}>
-                <Button>Next Page</Button>
+                <Button
+                  onClick={() => handlePageUpdate(1)}
+                  disabled={page === 4}
+                >
+                  Next Page
+                </Button>
               </FlexboxGrid.Item>
             </FlexboxGrid>
-          </div>
+          </Footer>
         )}
-
-        <br />
-        {token && <Button onClick={() => handleStoreData()}>Send Data</Button>}
       </Panel>
     </Container>
   );
