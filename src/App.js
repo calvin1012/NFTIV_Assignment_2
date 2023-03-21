@@ -42,7 +42,7 @@ function App() {
     if (isProfileUpdate) {
       async function updateProfile() {
         const res = await GetProfile(token);
-        console.log(res);
+        // console.log(res);
         setProfile(res);
       }
 
@@ -70,11 +70,6 @@ function App() {
     });
   };
 
-  const handleStoreData = () => {
-    StoreData(token, page, formValue);
-    setIsProfileUpdate(true);
-  };
-
   const renderForm = () => {
     switch (page) {
       case 0:
@@ -92,7 +87,7 @@ function App() {
     }
   };
 
-  console.log(formValue, page);
+  // console.log(formValue, page);
 
   return (
     <Container>
