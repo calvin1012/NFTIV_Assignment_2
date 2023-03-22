@@ -7,8 +7,7 @@ import {
   Footer,
   Form,
   Panel,
-  Stack,
-  CheckboxGroup
+  Stack
 } from "rsuite";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken, selectToken, updateToken } from "./store/slice/token";
@@ -28,7 +27,7 @@ import FormB2_3, { FormB2_3FormValue } from "./components/FormB2_3";
 function App() {
   const formRef = useRef();
   const dispatch = useDispatch();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [isProfileUpdate, setIsProfileUpdate] = useState(false);
   const [formValue, setFormValue] = useState([
     FormB1_1FormValue,
