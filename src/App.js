@@ -79,7 +79,7 @@ function App() {
     await StoreData(token, page + 1, formValue[page]);
     const t = await SubmitData(token);
     await dispatch(removeToken(t));
-    console.log(defaultFormValue);
+    // console.log(defaultFormValue);
     setFormValue([...defaultFormValue]);
   };
 
