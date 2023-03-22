@@ -23,18 +23,20 @@ import FormB2_1, { FormB2_1FormValue } from "./components/FormB2_1";
 import FormB2_2, { FormB2_2FormValue } from "./components/FormB2_2";
 import FormB2_3, { FormB2_3FormValue } from "./components/FormB2_3";
 
+const defaultFormValue = [
+  FormB1_1FormValue,
+  FormB1_2FormValue,
+  FormB2_1FormValue,
+  FormB2_2FormValue,
+  FormB2_3FormValue,
+];
 function App() {
   const formRef = useRef();
   const dispatch = useDispatch();
+  const [isSubmit, setIsSubmit] = useState(false);
   const [page, setPage] = useState(0);
   const [isProfileUpdate, setIsProfileUpdate] = useState(false);
-  const [formValue, setFormValue] = useState([
-    FormB1_1FormValue,
-    FormB1_2FormValue,
-    FormB2_1FormValue,
-    FormB2_2FormValue,
-    FormB2_3FormValue,
-  ]);
+  const [formValue, setFormValue] = useState([...defaultFormValue]);
   const [profile, setProfile] = useState(null);
   const token = useSelector(selectToken);
 
@@ -52,8 +54,10 @@ function App() {
   }, [isProfileUpdate]);
 
   const handleGetToken = async () => {
+    setIsSubmit(false);
     const t = await GetToken();
     await dispatch(updateToken(t));
+    setPage(0);
   };
 
   const handleRemoveToken = async () => {
@@ -68,6 +72,15 @@ function App() {
     setPage((nextPage) => {
       return (nextPage += p);
     });
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmit(true);
+    await StoreData(token, page + 1, formValue[page]);
+    const t = await SubmitData(token);
+    await dispatch(removeToken(t));
+    console.log(defaultFormValue);
+    setFormValue([...defaultFormValue]);
   };
 
   const renderForm = () => {
@@ -89,24 +102,16 @@ function App() {
 
   // console.log(formValue, page);
 
-  return (
-    <Container>
-      <Panel>
-        <ButtonToolbar>
-          <Button
-            onClick={() => {
-              token ? handleRemoveToken() : handleGetToken();
-            }}
-          >
-            {token ? "Remove token" : "Get Token"}
-          </Button>
+  const finishPage = () => {
+    return <h1>已提交表格！</h1>;
+  };
 
-          <p>current Token: {token}</p>
-        </ButtonToolbar>
-        <br />
+  const formPage = () => {
+    return (
+      <>
         {token && (
-          <Content style={{ height: window.innerHeight - 150 }}>
-            <Panel style={{ height: window.innerHeight - 160 }} shaded>
+          <Content>
+            <Panel shaded>
               <Form
                 ref={formRef}
                 formValue={formValue[page]}
@@ -125,6 +130,7 @@ function App() {
             </Panel>
           </Content>
         )}
+        <br />
         {token && (
           <Footer>
             <FlexboxGrid justify="space-around">
@@ -133,21 +139,41 @@ function App() {
                   onClick={() => handlePageUpdate(-1)}
                   disabled={page === 0}
                 >
-                  Prvs Page
+                  上一頁
                 </Button>
               </FlexboxGrid.Item>
 
               <FlexboxGrid.Item colspan={4}>
                 <Button
-                  onClick={() => handlePageUpdate(1)}
-                  disabled={page === 4}
+                  onClick={() =>
+                    page < 4 ? handlePageUpdate(1) : handleSubmit()
+                  }
                 >
-                  Next Page
+                  {page < 4 ? "下一頁" : "提交"}
                 </Button>
               </FlexboxGrid.Item>
             </FlexboxGrid>
           </Footer>
         )}
+      </>
+    );
+  };
+  return (
+    <Container>
+      <Panel>
+        <ButtonToolbar>
+          <Button
+            onClick={() => {
+              token ? handleRemoveToken() : handleGetToken();
+            }}
+          >
+            {token ? "Remove token" : "Get Token"}
+          </Button>
+
+          <p>current Token: {token}</p>
+        </ButtonToolbar>
+        <br />
+        {isSubmit ? finishPage() : formPage()}
       </Panel>
     </Container>
   );
